@@ -1,6 +1,0 @@
-curl -d "{\"apikey\":\"f30260d1-f1e2-46be-aabe-5e36b61a25f4\"}" https://tasks.aidevs.pl/token/helloapi
-
-curl https://tasks.aidevs.pl/task/7853c191dd35d267ea49f57ecb50324e6d8fa20e
-
-
-curl -d "{ \"answer\": \"aidevs_8166b0cf\" }" https://tasks.aidevs.pl/answer/7853c191dd35d267ea49f57ecb50324e6d8fa20e
