@@ -1,11 +1,11 @@
 package tasks
 
 type TasksAPI struct {
-	Endpoint string
-	Token    string
-	Answer   string
-	Task     string
-	Apikey   string
+	Endpoint     string
+	Token        string
+	Answer       string
+	Task         string
+	Apikey       string
 	OpenAiApikey string
 }
 
@@ -14,9 +14,9 @@ type AuthResponse struct {
 	Msg   string `json:"msg"`
 	Token string `json:"token"`
 }
+
 //===========================================
 // moderation
-
 type TaskResponse struct {
 	//Cookie string `json:"cookie"`
 	Input []string `json:"input"`
@@ -42,16 +42,16 @@ type ModerationInput struct {
 	Model string `json:"model"`
 }
 
+
 //===========================================
-/*
 // helloapi
+/*
 type TaskResponse struct {
 	Cookie string `json:"cookie"`
-	Msg   string  `json:"msg"`
-	Token string `json:"token"`
+	Msg    string `json:"msg"`
+	Token  string `json:"token"`
 }
 */
-
 type AnswerResponse struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
