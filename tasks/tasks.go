@@ -92,7 +92,7 @@ func GetTask(token string, TasksAPI TasksAPI) TaskResponse {
 	bodyBytes, _ := io.ReadAll(res.Body)
 
 	fmt.Printf("\nPrinting task...\n")
-	fmt.Println(token)
+	fmt.Printf("TOKEN:\n%v\n\n", token)
 	fmt.Println(string(bodyBytes))
 	fmt.Printf("\n")
 
@@ -147,7 +147,6 @@ func SendAnswer(token string, TasksAPI TasksAPI, answer string) AnswerResponse {
 
 func SendAnswerBoolTable(token string, TasksAPI TasksAPI, answer []bool) AnswerResponse {
 	requestURL := TasksAPI.Endpoint + TasksAPI.Answer + token
-	//fmt.Println(requestURL)
 
 	answerMarshaled, _ := json.Marshal(answer)
 	jsonbody := fmt.Sprintf(`{"answer": %v}`, string(answerMarshaled))
