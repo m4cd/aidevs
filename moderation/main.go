@@ -29,6 +29,4 @@ func main() {
 
 	tasks.SendAnswerBoolTable(token, TasksAPI, answer)
 
-	//asfdsafasfsdafsadfsadfsfafsasafdfsa
-
 }
