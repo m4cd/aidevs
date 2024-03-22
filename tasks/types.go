@@ -15,43 +15,6 @@ type AuthResponse struct {
 	Token string `json:"token"`
 }
 
-//===========================================
-// moderation
-type TaskResponse struct {
-	//Cookie string `json:"cookie"`
-	Input []string `json:"input"`
-	Msg   string   `json:"msg"`
-	//Token string `json:"token"`
-	Code int `json:"code"`
-}
-
-type ModerationResult struct {
-	//Categories     ModerationResultCategories     `json:"categories"`
-	//CategoryScores ModerationResultCategoryScores `json:"category_scores"`
-	Flagged        bool                 `json:"flagged"`
-}
-
-type ModerationResponse struct {
-	ID      string   `json:"id"`
-	Model   string   `json:"model"`
-	Results []ModerationResult `json:"results"`
-}
-
-type ModerationInput struct {
-	Input []string `json:"input"`
-	Model string `json:"model"`
-}
-
-
-//===========================================
-// helloapi
-/*
-type TaskResponse struct {
-	Cookie string `json:"cookie"`
-	Msg    string `json:"msg"`
-	Token  string `json:"token"`
-}
-*/
 type AnswerResponse struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
@@ -59,6 +22,41 @@ type AnswerResponse struct {
 }
 
 type Answer struct {
+	//helloapi
 	//Answer string `json:"answer"`
-	Answer []bool `json:"answer"`
+
+	//moderation
+	//Answer []bool `json:"answer"`
+
+	//blogger
+	Answer []string `json:"answer"`
+}
+
+// Type Alias
+type TaskResponse = TaskResponseBlogger
+
+// blogger
+type TaskResponseBlogger struct {
+	//Cookie string `json:"cookie"`
+	Blog []string `json:"blog"`
+	Msg  string   `json:"msg"`
+	//Token string `json:"token"`
+	Code int `json:"code"`
+}
+
+// moderation
+type TaskResponseModeration struct {
+	//Cookie string `json:"cookie"`
+	Input []string `json:"input"`
+	Msg   string   `json:"msg"`
+	//Token string `json:"token"`
+	Code int `json:"code"`
+}
+
+
+// helloapi
+type TaskResponseHelloapi struct {
+	Cookie string `json:"cookie"`
+	Msg    string `json:"msg"`
+	Token  string `json:"token"`
 }

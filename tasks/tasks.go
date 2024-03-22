@@ -173,12 +173,12 @@ func SendAnswerBoolTable(token string, TasksAPI TasksAPI, answer []bool) AnswerR
 
 	defer res.Body.Close()
 
-	/*
+	
 	if res.StatusCode != 200 {
 		fmt.Printf("Answer response error with code: %d\n", res.StatusCode)
 		os.Exit(1)
 	}
-*/
+
 	var AnswerResponse AnswerResponse
 	bodyBytes, _ := io.ReadAll(res.Body)
 
@@ -191,7 +191,46 @@ func SendAnswerBoolTable(token string, TasksAPI TasksAPI, answer []bool) AnswerR
 	return AnswerResponse
 }
 
-func OpenAiModerationFlagged(endpoint string, TasksAPI TasksAPI, task TaskResponse, model string) []bool {
+func SendAnswerBytes(token string, TasksAPI TasksAPI, answer []byte) AnswerResponse {
+	requestURL := TasksAPI.Endpoint + TasksAPI.Answer + token
+	
+	bodyReader := bytes.NewReader(answer)
+
+	req, err := http.NewRequest(http.MethodPost, requestURL, bodyReader)
+	if err != nil {
+		fmt.Printf("Cannot create answer request: %s\n", err)
+		os.Exit(1)
+	}
+
+	httpClient := http.Client{}
+	res, err := httpClient.Do(req)
+
+	if err != nil {
+		fmt.Printf("Client error making http request: %s\n", err)
+		os.Exit(1)
+	}
+
+	defer res.Body.Close()
+
+	if res.StatusCode != 200 {
+		fmt.Printf("Answer response error with code: %d\n", res.StatusCode)
+		os.Exit(1)
+	}
+
+	var AnswerResponse AnswerResponse
+	bodyBytes, _ := io.ReadAll(res.Body)
+
+	fmt.Printf("\nPrinting answer response...\n")
+	fmt.Println(string(bodyBytes))
+	fmt.Printf("\n")
+
+	json.Unmarshal(bodyBytes, &AnswerResponse)
+
+	return AnswerResponse
+}
+
+// Moderation
+func OpenAiModerationFlagged(endpoint string, TasksAPI TasksAPI, task TaskResponseModeration, model string) []bool {
 	requestURL := endpoint
 
 	inputBytes, _ := json.Marshal(task.Input)
@@ -246,4 +285,59 @@ func OpenAiModerationFlagged(endpoint string, TasksAPI TasksAPI, task TaskRespon
 	
 	return result
 
+}
+
+// Blogger
+func OpenAiCompletionRequest(endpoint string, TasksAPI TasksAPI, task TaskResponseBlogger, model string, systemMessage CompletionMessage, userMessage CompletionMessage) CompletionResponse {
+	requestURL := endpoint
+
+	//inputBytes, _ := json.Marshal(task.Blog)
+	
+	var CompletionRequest CompletionRequest
+	CompletionRequest.Model = model
+
+	CompletionRequest.Messages = append(CompletionRequest.Messages, systemMessage)
+	CompletionRequest.Messages = append(CompletionRequest.Messages, userMessage)
+
+	//fmt.Println("Printing completion request")
+	//fmt.Println(CompletionRequest)
+	jsonbody, _ := json.Marshal(CompletionRequest)
+	//fmt.Println(string(jsonbody))
+
+	bodyReader := bytes.NewReader(jsonbody)
+
+	req, err := http.NewRequest(http.MethodPost, requestURL, bodyReader)
+	if err != nil {
+		fmt.Printf("Cannot create request: %s\n", err)
+		os.Exit(1)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+TasksAPI.OpenAiApikey)
+
+	httpClient := http.Client{}
+	res, err := httpClient.Do(req)
+
+	if err != nil {
+		fmt.Printf("Client error making http request: %s\n", err)
+		os.Exit(1)
+	}
+
+	defer res.Body.Close()
+
+	/*
+	if res.StatusCode != 200 {
+		fmt.Printf("Answer response error with code: %d\n", res.StatusCode)
+		os.Exit(1)
+	}
+*/
+	var CompletionResponse CompletionResponse
+	bodyBytes, _ := io.ReadAll(res.Body)
+
+	// fmt.Printf("\nPrinting answer response...\n")
+	// fmt.Println(string(bodyBytes))
+	// fmt.Printf("\n")
+
+	json.Unmarshal(bodyBytes, &CompletionResponse)
+	
+	return CompletionResponse
 }
