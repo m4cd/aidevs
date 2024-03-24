@@ -274,12 +274,9 @@ func OpenAiModerationFlagged(endpoint string, TasksAPI TasksAPI, task TaskRespon
 
 	json.Unmarshal(bodyBytes, &ModerationResponse)
 
-	//fmt.Println(ModerationResponse.Results[0].Flagged)
-
 	var result []bool
 	
 	for i := 0; i < len(ModerationResponse.Results); i++ {
-		//fmt.Println(ModerationResponse.Results[i].Flagged)
 		result = append(result, ModerationResponse.Results[i].Flagged)
 	}
 	
@@ -324,12 +321,61 @@ func OpenAiCompletionRequest(endpoint string, TasksAPI TasksAPI, task TaskRespon
 
 	defer res.Body.Close()
 
-	/*
 	if res.StatusCode != 200 {
 		fmt.Printf("Answer response error with code: %d\n", res.StatusCode)
 		os.Exit(1)
 	}
-*/
+
+	var CompletionResponse CompletionResponse
+	bodyBytes, _ := io.ReadAll(res.Body)
+
+	// fmt.Printf("\nPrinting answer response...\n")
+	// fmt.Println(string(bodyBytes))
+	// fmt.Printf("\n")
+
+	json.Unmarshal(bodyBytes, &CompletionResponse)
+	
+	return CompletionResponse
+}
+
+// Liar
+func OpenAiCompletionRequestGuardrails(endpoint string, TasksAPI TasksAPI, questionAnswer QuestionAnswer, model string, systemMessage CompletionMessage, userMessage CompletionMessage) CompletionResponse {
+	requestURL := endpoint
+	
+	var CompletionRequest CompletionRequest
+	CompletionRequest.Model = model
+
+	CompletionRequest.Messages = append(CompletionRequest.Messages, systemMessage)
+	CompletionRequest.Messages = append(CompletionRequest.Messages, userMessage)
+
+	jsonbody, _ := json.Marshal(CompletionRequest)
+
+	bodyReader := bytes.NewReader(jsonbody)
+
+	req, err := http.NewRequest(http.MethodPost, requestURL, bodyReader)
+	if err != nil {
+		fmt.Printf("Cannot create request: %s\n", err)
+		os.Exit(1)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+TasksAPI.OpenAiApikey)
+
+	httpClient := http.Client{}
+	res, err := httpClient.Do(req)
+
+	if err != nil {
+		fmt.Printf("Client error making http request: %s\n", err)
+		os.Exit(1)
+	}
+
+	defer res.Body.Close()
+
+	
+	if res.StatusCode != 200 {
+		fmt.Printf("Answer response error with code: %d\n", res.StatusCode)
+		os.Exit(1)
+	}
+
 	var CompletionResponse CompletionResponse
 	bodyBytes, _ := io.ReadAll(res.Body)
 
