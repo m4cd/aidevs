@@ -285,7 +285,7 @@ func OpenAiModerationFlagged(endpoint string, TasksAPI TasksAPI, task TaskRespon
 }
 
 // Blogger
-func OpenAiCompletionRequest(endpoint string, TasksAPI TasksAPI, task TaskResponseBlogger, model string, systemMessage CompletionMessage, userMessage CompletionMessage) CompletionResponse {
+func OpenAiCompletionRequest(endpoint string, TasksAPI TasksAPI, task TaskResponse, model string, systemMessage CompletionMessage, userMessage CompletionMessage) CompletionResponse {
 	requestURL := endpoint
 
 	//inputBytes, _ := json.Marshal(task.Blog)

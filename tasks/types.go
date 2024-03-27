@@ -33,7 +33,17 @@ type Answer struct {
 }
 
 // Type Alias
-type TaskResponse = TaskResponseBlogger
+type TaskResponse = TaskResponseInprompt
+
+// inprompt
+type TaskResponseInprompt struct {
+	//Cookie string `json:"cookie"`
+	Input []string `json:"input"`
+	Msg   string   `json:"msg"`
+	//Token string `json:"token"`
+	Code int `json:"code"`
+	Question string `json:"question"`
+}
 
 // blogger
 type TaskResponseBlogger struct {
@@ -52,7 +62,6 @@ type TaskResponseModeration struct {
 	//Token string `json:"token"`
 	Code int `json:"code"`
 }
-
 
 // helloapi
 type TaskResponseHelloapi struct {
